@@ -1,4 +1,4 @@
-#include <kore.h>
+#include <core.h>
 
 int main() 
 {
@@ -6,7 +6,7 @@ int main()
     Create.Screen();
 
     printf("Welcome to Malcore\n");
-    printf("Made in Kore v%d.%d\n", 0, 1);
+    printf("Made in Core v%d.%d\n", 0, 1);
 
     volatile int cero = 0;
     printf("%d\n", 10 / cero);

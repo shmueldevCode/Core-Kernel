@@ -80,7 +80,7 @@ static void draw_char(char c, uint64_t col, uint64_t row)
         }   
 }
 
-void kore_putchar(char c)
+void core_putchar(char c)
 {
     if (!fb) return;
     uint64_t cols = fb->width / (8 * SCALE);
@@ -95,7 +95,7 @@ void kore_putchar(char c)
     if (cy >= rows) clear();
 }
 
-void kore_set_colors(uint32_t text, uint32_t back)
+void core_set_colors(uint32_t text, uint32_t back)
 {
     fg = text;
     bg = back;

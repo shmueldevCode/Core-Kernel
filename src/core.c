@@ -1,6 +1,6 @@
 #include <stdint.h>
 #include <stddef.h>
-#include "kore.h"
+#include "core.h"
 
 __attribute__((used, section(".limine_requests")))
 static volatile uint64_t limine_base_revision[3] = {
@@ -17,7 +17,7 @@ static void kernel_init(void){
 
 void screen_init(void);
 
-KoreCreate Create = {
+CoreCreate Create = {
     .Kernel = kernel_init,
     .Screen = screen_init,
 };

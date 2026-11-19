@@ -1,13 +1,13 @@
-# Kore-Kernel# Kore
+# Core-Kernel# Core
 
 **Crea tu propio kernel en 5 líneas de C.**
 
 Siempre me pareció injusto que hacer un sistema operativo fuera algo reservado para gente que ya sabe un montón de ensamblador, linkers, manuales de Intel blablabla. Cuando empecé con mi propio OS (MalCore) me di cuenta de que el 90% del tiempo se va en lo mismo: arrancar, pintar la pantalla, configurar tablas raras del CPU... y recién después puedes hacer lo divertido.
 
-Kore es mi intento de arreglar eso. Es un framework en C que se encarga de todo lo pesado para que tú solo escribas esto:
+Core es mi intento de arreglar eso. Es un framework en C que se encarga de todo lo pesado para que tú solo escribas esto:
 
 ```c
-#include <kore.h>
+#include <core.h>
 
 int main()
 {
@@ -22,7 +22,7 @@ int main()
 
 Compilas, arranca en QEMU, y eso que ves en pantalla lo está dibujando **tu kernel**. Sin sistema operativo debajo. Nada de Linux, nada de Windows. Solo tu código y el CPU.
 
-> **Kore está en desarrollo temprano.** Funciona, pero todavía le falta mucho. Lo voy construyendo poco a poco y documentando el camino.
+> **Core está en desarrollo temprano.** Funciona, pero todavía le falta mucho. Lo voy construyendo poco a poco y documentando el camino.
 
 ---
 
@@ -35,7 +35,7 @@ Compilas, arranca en QEMU, y eso que ves en pantalla lo está dibujando **tu ker
 
 **v0.2 — El kernel se defiende**
 - `Create.Kernel()` carga una GDT y una IDT propias
-- Si algo explota (división entre cero, page fault, instrucción inválida...), en vez de reiniciarse o congelarse, Kore te muestra una pantalla roja de **KERNEL PANIC** con el error y la dirección exacta donde pasó
+- Si algo explota (división entre cero, page fault, instrucción inválida...), en vez de reiniciarse o congelarse, Core te muestra una pantalla roja de **KERNEL PANIC** con el error y la dirección exacta donde pasó
 
 Que parece poco, pero ahí adentro ya hay manejo de interrupciones del CPU funcionando.
 
@@ -52,8 +52,8 @@ sudo pacman -S clang lld make qemu-full xorriso limine
 Clonas y corres:
 
 ```bash
-git clone https://github.com/shmueldevCode/Kore-Kernel.git
-cd Kore-Kernel
+git clone https://github.com/shmueldevCode/Core-Kernel.git
+cd Core-Kernel
 make run
 ```
 
@@ -70,9 +70,9 @@ Ese ejemplo hace una división entre cero a propósito. 💥
 ## Cómo está organizado
 
 ```
-Kore-Kernel/
+Core-Kernel/
 ├── include/
-│   └── kore.h          ← lo único que necesita ver el usuario
+│   └── core.h          ← lo único que necesita ver el usuario
 ├── src/
 │   ├── core.c          ← el verdadero inicio (_start) y el objeto Create
 │   ├── gdt.c           ← segmentos de memoria
@@ -105,7 +105,7 @@ Este es el plan. Cada versión depende de la anterior, así que voy en orden:
 - [ ] **v0.7** — Sistema de archivos
 - [ ] **v0.8** — Drivers propios con una interfaz simple
 - [ ] **v1.0** — Tests, estabilidad y documentación completa
-- [ ] **Extra** — `kore build` en Python para que sea todavía más fácil
+- [ ] **Extra** — `core build` en Python para que sea todavía más fácil
 
 La meta es llegar a la v1.0 antes de terminar la carrera y presentarlo como mi trabajo final.
 
@@ -113,7 +113,7 @@ La meta es llegar a la v1.0 antes de terminar la carrera y presentarlo como mi t
 
 ## ¿Y MalCore?
 
-MalCore es mi sistema operativo. Kore es la herramienta con la que lo estoy construyendo. La idea es que al final MalCore sea la prueba de que Kore funciona de verdad.
+MalCore es mi sistema operativo. Core es la herramienta con la que lo estoy construyendo. La idea es que al final MalCore sea la prueba de que Core funciona de verdad.
 
 ---
 

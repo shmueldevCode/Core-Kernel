@@ -1,14 +1,14 @@
 #include <stdarg.h>
 #include <stdint.h>
 
-void kore_putchar(char c);
+void core_putchar(char c);
 
 static int print_str(const char *s)
 {
     int n = 0;
     while (*s)
     {
-        kore_putchar(*s++); n++; 
+        core_putchar(*s++); n++; 
     }
     return n;
 }
@@ -18,13 +18,13 @@ static int print_num(uint64_t v, unsigned base, int neg)
     char buf[32];
     int i = 0, n = 0;
 
-    if (neg) {kore_putchar('-'); n++; }
+    if (neg) {core_putchar('-'); n++; }
     do
     {
         buf[i++] = "0123456789abcdef"[v % base];
         v /= base;
     }while (v);
-    while (i) { kore_putchar(buf[--i]); n++; }
+    while (i) { core_putchar(buf[--i]); n++; }
     return n;
 }
 
@@ -36,7 +36,7 @@ int printf(const char *fmt, ...)
 
     for (; *fmt; fmt++)
     {
-        if (*fmt != '%') { kore_putchar(*fmt); n++; continue;}
+        if (*fmt != '%') { core_putchar(*fmt); n++; continue;}
 
         switch (*++fmt)
         {
@@ -55,8 +55,8 @@ int printf(const char *fmt, ...)
                 n += print_str(s ? s : "(null)");
                 break;
             }
-            case 'c': kore_putchar((char)va_arg(ap, int)); n++; break;
-            case '%': kore_putchar('%'); n++; break;
+            case 'c': core_putchar((char)va_arg(ap, int)); n++; break;
+            case '%': core_putchar('%'); n++; break;
             case '\0': fmt--; break;
 
             case 'p':
@@ -66,7 +66,7 @@ int printf(const char *fmt, ...)
                 n += print_num(v,16, 0);
                 break;
             }
-            default: kore_putchar('%'); kore_putchar(*fmt); n += 2;
+            default: core_putchar('%'); core_putchar(*fmt); n += 2;
         }
     }
 

@@ -14,7 +14,7 @@ SRC     := $(wildcard src/*.c) examples/$(EXAMPLE)/main.c
 OBJ     := $(patsubst %.c,build/%.o,$(SRC))
 LIMINE  := /usr/share/limine
 
-all: build/kore.iso
+all: build/core.iso
 
 build/%.o: %.c
 > @mkdir -p $(dir $@)
@@ -23,7 +23,7 @@ build/%.o: %.c
 build/kernel: $(OBJ) linker.ld
 > $(LD) $(LDFLAGS) $(OBJ) -o $@
 
-build/kore.iso: build/kernel limine.conf
+build/core.iso: build/kernel limine.conf
 > rm -rf build/iso_root
 > mkdir -p build/iso_root/boot/limine
 > cp build/kernel build/iso_root/boot/kernel
@@ -33,7 +33,7 @@ build/kore.iso: build/kernel limine.conf
 >   --protective-msdos-label build/iso_root -o $@
 > limine bios-install $@
 
-run: build/kore.iso
+run: build/core.iso
 > qemu-system-x86_64 -cdrom $< -m 256M
 
 clean:

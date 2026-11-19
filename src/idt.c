@@ -2,7 +2,7 @@
 
 int printf(const char *fmt, ...);
 void clear(void);
-void kore_set_colors(uint32_t text, uint32_t back);
+void core_set_colors(uint32_t text, uint32_t back);
 
 struct interrupt_frame
 {
@@ -48,9 +48,9 @@ static void idt_set(int vec, void *handler)
 __attribute__((noreturn))
 static void panic_screen(const char *name, struct interrupt_frame *f,
                          uint64_t err, int has_err) {
-                            kore_set_colors(0xFFFFFF, 0x8B0000);
+                            core_set_colors(0xFFFFFF, 0x8B0000);
                             clear();
-                            printf("=== KORE KERNEL PANIC ===\n\n");
+                            printf("=== CORE KERNEL PANIC ===\n\n");
                             printf("Excepcion: %s\n", name);
                             printf("RIP: %p\n", (void *)f->ip);
                             if (has_err) printf("Codigo de error: %p\n", (void *)err);

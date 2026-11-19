@@ -1,13 +1,13 @@
-#ifndef KORE_H
-#define KORE_H
+#ifndef CORE_H
+#define CORE_H
 
 typedef  struct
 {
     void (*Kernel)(void);
     void (*Screen)(void);
-} KoreCreate;
+} CoreCreate;
 
-extern KoreCreate Create;
+extern CoreCreate Create;
 
 int printf(const char *fmt, ...);
 void clear(void);
