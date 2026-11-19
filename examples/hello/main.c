@@ -2,14 +2,18 @@
 
 int main() 
 {
-    Create.Kernel();
-    Create.Screen();
+    Kernel.init();
+    Screen.init();
 
     printf("Welcome to Malcore\n");
     printf("Made in Core v%d.%d\n", 0, 1);
 
-    volatile int cero = 0;
-    printf("%d\n", 10 / cero);
+    for (int i = 3; i > 0; i--)
+    {
+        Screen.print("%d...\n", i);
+        Timer.sleep(1000);
+    }
 
+    Screen.print("Timer OK: %d ms desde el arranque\n", (int)Timer.uptime());
     return 0;
 }

@@ -1,3 +1,4 @@
+#include <core.h>
 #include <stdint.h>
 #include <stddef.h>
 #include "font.h"
@@ -100,3 +101,11 @@ void core_set_colors(uint32_t text, uint32_t back)
     fg = text;
     bg = back;
 }
+
+CoreScreen Screen =
+{
+    .init = screen_init,
+    .clear = clear,
+    .color = core_set_colors,
+    .print = printf,
+};

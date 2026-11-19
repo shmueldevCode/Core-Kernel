@@ -33,7 +33,7 @@ struct idt_ptr
 static struct idt_entry idt[256];
 static struct idt_ptr idtr;
 
-static void idt_set(int vec, void *handler)
+void idt_set(int vec, void *handler)
 {
     uint64_t addr = (uint64_t)handler;
     idt[vec].offset_low  = addr & 0xFFFF;

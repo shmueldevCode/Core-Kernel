@@ -9,21 +9,23 @@ static volatile uint64_t limine_base_revision[3] = {
 
 void gdt_init(void);
 void idt_init(void);
+void pic_init(void);
+void timer_init(void);
 
-static void kernel_init(void){
+static void kernel_init(void) {
     gdt_init();
     idt_init();
+    pic_init();
+    timer_init();
+    __asm__ volatile ("sti");
 }
 
-void screen_init(void);
-
-CoreCreate Create = {
-    .Kernel = kernel_init,
-    .Screen = screen_init,
+CoreKernel Kernel = {
+    .init = kernel_init,
 };
 
 void *memset(void *d, int c, size_t n) {
-    uint8_t *p =d;
+    uint8_t *p = d;
     while (n--) *p++ = (uint8_t)c;
     return d;
 }
