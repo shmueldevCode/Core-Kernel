@@ -88,6 +88,9 @@ void core_putchar(char c)
     uint64_t rows = fb->height / (8 * SCALE);
 
     if (c == '\n') { cx = 0; cy++; }
+    else if (c == '\b') {
+        if (cx > 0) {cx--; draw_char(' ', cx, cy); }
+    }
     else
     {
         draw_char( c, cx, cy);

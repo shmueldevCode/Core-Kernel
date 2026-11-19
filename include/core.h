@@ -19,9 +19,16 @@ typedef struct {
     uint64_t (*uptime)(void);
 } CoreTimer;
 
+typedef struct {
+    void (*init)(void);
+    char (*read)(void);
+    int (*available)(void);
+} CoreKeyboard;
+
 extern CoreKernel Kernel;
 extern CoreScreen Screen;
 extern CoreTimer  Timer;
+extern CoreKeyboard Keyboard;
 
 int printf(const char *fmt, ...);
 

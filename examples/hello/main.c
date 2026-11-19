@@ -4,16 +4,12 @@ int main()
 {
     Kernel.init();
     Screen.init();
+    Keyboard.init();
 
-    printf("Welcome to Malcore\n");
-    printf("Made in Core v%d.%d\n", 0, 1);
-
-    for (int i = 3; i > 0; i--)
+    while (1)
     {
-        Screen.print("%d...\n", i);
-        Timer.sleep(1000);
+        char c = Keyboard.read();
+        Screen.print("%c", c);
+        if (c == '\n') Screen.print("> ");
     }
-
-    Screen.print("Timer OK: %d ms desde el arranque\n", (int)Timer.uptime());
-    return 0;
 }
