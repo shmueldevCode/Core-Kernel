@@ -22,7 +22,7 @@ int main()
 
 Compilas, arranca en QEMU, y eso que ves en pantalla lo está dibujando **tu kernel**. Sin sistema operativo debajo. Nada de Linux, nada de Windows. Solo tu código y el CPU.
 
-> 🚧 **Kore está en desarrollo temprano.** Funciona, pero todavía le falta mucho. Lo voy construyendo poco a poco y documentando el camino.
+> **Kore está en desarrollo temprano.** Funciona, pero todavía le falta mucho. Lo voy construyendo poco a poco y documentando el camino.
 
 ---
 
@@ -127,4 +127,4 @@ Si encuentras un bug, tienes una idea o simplemente quieres preguntar algo, abre
 
 MIT. Úsalo, rómpelo, mejóralo. Solo deja el crédito.
 
-Hecho con mucho café y muchos `triple fault` por **[shmueldevCode](https://github.com/shmueldevCode)** desde Perú 🇵🇪
+Hecho con mucho café y muchos `triple fault` por **[shmueldevCode](https://github.com/shmueldevCode)**
