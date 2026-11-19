@@ -94,3 +94,9 @@ void kore_putchar(char c)
     }
     if (cy >= rows) clear();
 }
+
+void kore_set_colors(uint32_t text, uint32_t back)
+{
+    fg = text;
+    bg = back;
+}

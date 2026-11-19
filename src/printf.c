@@ -58,6 +58,14 @@ int printf(const char *fmt, ...)
             case 'c': kore_putchar((char)va_arg(ap, int)); n++; break;
             case '%': kore_putchar('%'); n++; break;
             case '\0': fmt--; break;
+
+            case 'p':
+            {
+                uint64_t v = (uint64_t)va_arg(ap, void *);
+                n += print_str("0x");
+                n += print_num(v,16, 0);
+                break;
+            }
             default: kore_putchar('%'); kore_putchar(*fmt); n += 2;
         }
     }
