@@ -1,15 +1,28 @@
 #include <core.h>
 
-int main() 
+int main()
 {
-    Create.Kernel();
-    Create.Screen();
+    Kernel.init();
+    Screen.init();
+    Keyboard.init();
 
-    printf("Welcome to Malcore\n");
-    printf("Made in Core v%d.%d\n", 0, 1);
+    Screen.print("Welcome to Malcore\n");
+    Screen.print("RAM usable: %d MB\n", (int)(Memory.total() / 1024 / 1024));
+    Screen.print("\nEscribe algo:\n> ");
 
-    volatile int cero = 0;
-    printf("%d\n", 10 / cero);
+        while (1)
+    {
+        char c = Keyboard.read();
 
-    return 0;
+        if (c == CTRL('l'))      Screen.clear();
+        else if (c == CTRL('c')) Screen.print("^C\n> ");
+        else if (c == KEY_UP)    Screen.print("[arriba]");
+        else if (c == KEY_DOWN)  Screen.print("[abajo]");
+        else if (c == KEY_LEFT)  Screen.print("[izq]");
+        else if (c == KEY_RIGHT) Screen.print("[der]");
+        else {
+            Screen.print("%c", c);
+            if (c == '\n') Screen.print("> ");
+        }
+    }
 }

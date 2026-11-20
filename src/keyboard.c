@@ -27,7 +27,21 @@ static const char keymap_shift[128] = {
 #define BUF_SIZE 128
 static volatile char buffer[BUF_SIZE];
 static volatile uint8_t head = 0, tail = 0;
-static volatile int shift = 0;
+static volatile int shift = 0, caps = 0, ctrl = 0, alt = 0, extended = 0;
+
+static void push(char c)
+{
+    uint8_t next = (head + 1) % BUF_SIZE;
+    if (next != tail) {
+        buffer[head] = c;
+        head = next;
+    }
+}
+
+static int is_letter(char c)
+{
+    return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
+}
 
 __attribute__((interrupt))
 static void keyboard_handler(struct interrupt_frame *f)
@@ -35,17 +49,41 @@ static void keyboard_handler(struct interrupt_frame *f)
     (void)f;
     uint8_t sc = inb(0x60);
 
-    if (sc == 0x2A || sc == 0x36) shift = 1;
-    else if (sc == 0xAA || sc == 0XB6) shift = 0;
-    else if (!(sc & 0x80))
-    {
-        char c = shift ? keymap_shift[sc] : keymap[sc];
-        uint8_t next = (head + 1) % BUF_SIZE;
-        if (c && next != tail)
-        {
-            buffer[head] = c;
-            head = next;
+    if (sc == 0xE0) {
+        extended = 1;
+        pic_eoi(1);
+        return;
+    }
+
+    int released = sc & 0x80;
+    uint8_t code = sc & 0x7F;
+
+    if (extended) {
+        extended = 0;
+        if (code == 0x1D) ctrl = !released;
+        else if (code == 0x38) alt = !released;
+        else if (!released) {
+            if (code == 0x48) push(KEY_UP);
+            if (code == 0x50) push(KEY_DOWN);
+            if (code == 0x4B) push(KEY_LEFT);
+            if (code == 0x4D) push(KEY_RIGHT);
         }
+        pic_eoi(1);
+        return;
+    }
+
+    switch (code) {
+        case 0x2A: case 0x36: shift = !released; break;
+        case 0x1D:            ctrl  = !released; break;
+        case 0x38:            alt   = !released; break;
+        case 0x3A:            if (!released) caps = !caps; break;
+        default:
+            if (!released) {
+                char c = shift ? keymap_shift[code] : keymap[code];
+                if (caps && is_letter(c)) c ^= 0x20;
+                if (ctrl && is_letter(c)) c = CTRL(c);
+                if (c) push(c);
+            }
     }
     pic_eoi(1);
 }
@@ -57,7 +95,7 @@ static void keyboard_init(void)
     pic_unmask(1);
 }
 
-static int Keyboard_available(void)
+static int keyboard_available(void)
 {
     return head != tail;
 }
@@ -72,7 +110,7 @@ static char keyboard_read(void)
 }
 
 CoreKeyboard Keyboard = {
-    .init = keyboard_init,
-    .read = keyboard_read,
-    .available = Keyboard_available,
+    .init      = keyboard_init,
+    .read      = keyboard_read,
+    .available = keyboard_available,
 };

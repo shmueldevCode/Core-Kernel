@@ -1,3 +1,4 @@
+#include <stdatomic.h>
 #include <stdint.h>
 #include <stddef.h>
 #include "core.h"
@@ -7,12 +8,14 @@ static volatile uint64_t limine_base_revision[3] = {
     0xf9562b2d5c95a6c8, 0x6a7b384944536bdc, 3
 };
 
+void memory_init(void);
 void gdt_init(void);
 void idt_init(void);
 void pic_init(void);
 void timer_init(void);
 
 static void kernel_init(void) {
+    memory_init();
     gdt_init();
     idt_init();
     pic_init();
