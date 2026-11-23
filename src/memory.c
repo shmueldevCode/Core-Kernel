@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <core.h>
+#include "internal.h"
 
 struct limine_hhdm_response { uint64_t revision; uint64_t offset; };
 struct limine_hhdm_request { uint64_t id[4]; uint64_t revision; struct limine_hhdm_response *response; };
@@ -111,7 +112,7 @@ static void mem_free(void *ptr)
         }
 }
 
-void memory_init(void)
+void core_memory_init(void)
 {
     if (!hhdm_req.response || !memmap_req.response) return;
 

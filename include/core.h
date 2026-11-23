@@ -3,10 +3,13 @@
 
 #include <stdint.h>
 
-#define KEY_UP     0x11
-#define KEY_DOWN   0x12
-#define KEY_LEFT   0x13
-#define KEY_RIGHT  0x14
+/* Teclas especiales: usan codigos 0x80+ para no chocar con CTRL('a')..CTRL('z'),
+   que ocupan 0x01..0x1A. El cast a char permite comparar con lo que
+   devuelve Keyboard.read(). */
+#define KEY_UP     ((char)0x80)
+#define KEY_DOWN   ((char)0x81)
+#define KEY_LEFT   ((char)0x82)
+#define KEY_RIGHT  ((char)0x83)
 #define CTRL(c)    ((c) & 0x1F)
 
 typedef struct {

@@ -1,10 +1,7 @@
 #include <stdint.h>
 #include <core.h>
 #include "io.h"
-
-void pic_unmask(uint8_t irq);
-void pic_eoi(uint8_t irq);
-void idt_set(int vec, void *handler);
+#include "internal.h"
 
 struct interrupt_frame;
 
@@ -51,7 +48,7 @@ static void keyboard_handler(struct interrupt_frame *f)
 
     if (sc == 0xE0) {
         extended = 1;
-        pic_eoi(1);
+        core_pic_eoi(1);
         return;
     }
 
@@ -68,7 +65,7 @@ static void keyboard_handler(struct interrupt_frame *f)
             if (code == 0x4B) push(KEY_LEFT);
             if (code == 0x4D) push(KEY_RIGHT);
         }
-        pic_eoi(1);
+        core_pic_eoi(1);
         return;
     }
 
@@ -85,14 +82,14 @@ static void keyboard_handler(struct interrupt_frame *f)
                 if (c) push(c);
             }
     }
-    pic_eoi(1);
+    core_pic_eoi(1);
 }
 
 static void keyboard_init(void)
 {
     while (inb(0x64) & 1) inb(0x60);
-    idt_set(33, keyboard_handler);
-    pic_unmask(1);
+    core_idt_set(33, keyboard_handler);
+    core_pic_unmask(1);
 }
 
 static int keyboard_available(void)

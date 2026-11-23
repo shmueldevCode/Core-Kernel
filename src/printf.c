@@ -1,7 +1,6 @@
 #include <stdarg.h>
 #include <stdint.h>
-
-void core_putchar(char c);
+#include "internal.h"
 
 static int print_str(const char *s)
 {
