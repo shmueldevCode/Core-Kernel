@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <stddef.h>
 #include "font.h"
+#include "internal.h"
 
 struct limine_framebuffer 
 {
@@ -48,7 +49,7 @@ static void put_pixel(uint64_t x, uint64_t  y, uint32_t color)
     row[x] = color;
 }
 
-void clear(void)
+static void screen_clear(void)
 {
     if (!fb) return;
     for (uint64_t y = 0; y < fb->height; y++)
@@ -57,12 +58,12 @@ void clear(void)
     cx = cy = 0;
 }
 
-void screen_init(void)
+static void screen_init(void)
 {
     if (!fb_request.response || fb_request.response->framebuffer_count < 1)
         return;
     fb = fb_request.response->framebuffers[0];
-    clear();
+    screen_clear();
 }
 
 static void draw_char(char c, uint64_t col, uint64_t row)
@@ -122,7 +123,7 @@ void core_putchar(char c)
     }
 }
 
-void core_set_colors(uint32_t text, uint32_t back)
+static void screen_color(uint32_t text, uint32_t back)
 {
     fg = text;
     bg = back;
@@ -131,7 +132,7 @@ void core_set_colors(uint32_t text, uint32_t back)
 CoreScreen Screen =
 {
     .init = screen_init,
-    .clear = clear,
-    .color = core_set_colors,
+    .clear = screen_clear,
+    .color = screen_color,
     .print = printf,
 };

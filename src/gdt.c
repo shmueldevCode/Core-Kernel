@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include "internal.h"
 
 struct gdt_ptr
 {
@@ -15,7 +16,7 @@ static uint64_t gdt[3] =
 
 static struct gdt_ptr gdtr;
 
-void gdt_init(void)
+void core_gdt_init(void)
 {
     gdtr.limit = sizeof(gdt) - 1;
     gdtr.base = (uint64_t)&gdt;

@@ -118,6 +118,7 @@ Core-Kernel/
 │   ├── screen.c        ← framebuffer y dibujo de letras
 │   ├── printf.c        ← printf hecho desde cero
 │   ├── io.h            ← hablar con el hardware por puertos
+│   ├── internal.h      ← funciones internas (prefijo core_, para no chocar con las tuyas)
 │   └── font.h          ← fuente 8x8
 ├── examples/
 │   ├── hello/          ← el ejemplo básico
