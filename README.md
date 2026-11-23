@@ -87,11 +87,15 @@ make run
 
 Se abre QEMU con tu kernel. Haz clic dentro de la ventana y escribe.
 
+¿Prefieres arrancar por UEFI? `make run-uefi` (necesita `edk2-ovmf`; si tu OVMF está en otra ruta, pásala con `OVMF=/ruta/OVMF.fd`).
+
 Si quieres ver la pantalla de pánico en acción:
 
 ```bash
-make clean && make run EXAMPLE=panic
+make run EXAMPLE=panic
 ```
+
+Cada ejemplo se compila en su propia carpeta (`build/<ejemplo>/`), así que puedes cambiar de uno a otro sin hacer `make clean`.
 
 Ese ejemplo hace una división entre cero a propósito. 💥
 
