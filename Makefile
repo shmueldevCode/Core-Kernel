@@ -13,6 +13,7 @@ EXAMPLE ?= hello
 SRC     := $(wildcard src/*.c) examples/$(EXAMPLE)/main.c
 OBJ     := $(patsubst %.c,build/%.o,$(SRC))
 LIMINE  := /usr/share/limine
+OVMF    ?= /usr/share/edk2/x64/OVMF.4m.fd
 
 all: build/core.iso
 
@@ -25,19 +26,27 @@ build/kernel: $(OBJ) linker.ld
 
 build/core.iso: build/kernel limine.conf
 > rm -rf build/iso_root
-> mkdir -p build/iso_root/boot/limine
+> mkdir -p build/iso_root/boot/limine build/iso_root/EFI/BOOT
 > cp build/kernel build/iso_root/boot/kernel
-> cp limine.conf $(LIMINE)/limine-bios.sys $(LIMINE)/limine-bios-cd.bin build/iso_root/boot/limine/
+> cp limine.conf $(LIMINE)/limine-bios.sys $(LIMINE)/limine-bios-cd.bin \
+>    $(LIMINE)/limine-uefi-cd.bin build/iso_root/boot/limine/
+> cp $(LIMINE)/BOOTX64.EFI build/iso_root/EFI/BOOT/
 > xorriso -as mkisofs -R -r -J -b boot/limine/limine-bios-cd.bin \
->   -no-emul-boot -boot-load-size 4 -boot-info-table \
->   --protective-msdos-label build/iso_root -o $@
+>   -no-emul-boot -boot-load-size 4 -boot-info-table -hfsplus \
+>   -apm-block-size 2048 --efi-boot boot/limine/limine-uefi-cd.bin \
+>   -efi-boot-part --efi-boot-image --protective-msdos-label \
+>   build/iso_root -o $@
 > limine bios-install $@
 
 run: build/core.iso
 > qemu-system-x86_64 -cdrom $< -m 256M
 
+run-uefi: build/core.iso
+> qemu-system-x86_64 -bios $(OVMF) -cdrom $< -m 256M
+
 clean:
 > rm -rf build
 
-.PHONY: all run clean
+.PHONY: all run run-uefi clean
+.DELETE_ON_ERROR:
 
