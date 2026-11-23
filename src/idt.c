@@ -74,12 +74,22 @@ EXC(1,       "Debug")
 EXC(3,       "Breakpoint")
 EXC(6,       "Instruccion invalida")
 EXC_ERR(8,   "Doble fallo")
+EXC_ERR(10,  "TSS invalido")
+EXC_ERR(11,  "Segmento no presente")
+EXC_ERR(12,  "Fallo del segmento de pila")
 EXC_ERR(13,  "Proteccion general")
 EXC_ERR(14,  "Fallo de pagina")
+EXC_ERR(17,  "Comprobacion de alineacion")
+EXC_ERR(21,  "Proteccion de control de flujo")
+EXC_ERR(29,  "Comunicacion con el VMM")
+EXC_ERR(30,  "Excepcion de seguridad")
 EXC(unknown, "Excepcion desconocida")
 
 void idt_init(void)
 {
+    /* Ojo: las excepciones 8, 10-14, 17, 21, 29 y 30 meten un codigo de error
+       en la pila. Si usan un handler sin el parametro `err`, el marco queda
+       corrido y el RIP que se muestra es en realidad el codigo de error. */
     for (int i = 0; i < 32; i++)
         idt_set(i, exc_unknown);
 
@@ -88,8 +98,15 @@ void idt_init(void)
     idt_set(3,  exc_3);
     idt_set(6,  exc_6);
     idt_set(8,  exc_8);
+    idt_set(10, exc_10);
+    idt_set(11, exc_11);
+    idt_set(12, exc_12);
     idt_set(13, exc_13);
     idt_set(14, exc_14);
+    idt_set(17, exc_17);
+    idt_set(21, exc_21);
+    idt_set(29, exc_29);
+    idt_set(30, exc_30);
 
     idtr.limit = sizeof(idt) -1;
     idtr.base = (uint64_t)&idt;
