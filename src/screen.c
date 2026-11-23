@@ -81,6 +81,26 @@ static void draw_char(char c, uint64_t col, uint64_t row)
         }   
 }
 
+/* Sube todo el texto una linea y deja la ultima linea vacia. */
+static void scroll(void)
+{
+    uint64_t line_h = 8 * SCALE;                  /* alto de una linea en pixeles */
+    uint64_t rows   = fb->height / line_h;
+    uint64_t line   = line_h * fb->pitch;         /* bytes de una linea de texto */
+
+    /* Copiamos de 8 en 8 bytes: `line` siempre es multiplo de 8 porque
+       pitch es multiplo de 4 y line_h es par. */
+    uint64_t *dst  = (uint64_t *)fb->address;
+    uint64_t *src  = (uint64_t *)((uint8_t *)fb->address + line);
+    uint64_t words = (rows - 1) * line / 8;
+    for (uint64_t i = 0; i < words; i++)
+        dst[i] = src[i];
+
+    for (uint64_t y = (rows - 1) * line_h; y < rows * line_h; y++)
+        for (uint64_t x = 0; x < fb->width; x++)
+            put_pixel(x, y, bg);
+}
+
 void core_putchar(char c)
 {
     if (!fb) return;
@@ -96,7 +116,10 @@ void core_putchar(char c)
         draw_char( c, cx, cy);
         if (++cx >= cols) { cx = 0; cy++; }
     }
-    if (cy >= rows) clear();
+    if (cy >= rows) {
+        scroll();
+        cy = rows - 1;
+    }
 }
 
 void core_set_colors(uint32_t text, uint32_t back)
